@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IWFC - Intelligent Wellness & Fitness Center</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#f0fdf4', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' },
+            darkbg: '#0f172a',
+            cardbg: '#1e293b'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; color: #f1f5f9; }
+    .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .badge-operational { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .badge-faulty { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-maintenance { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Top Header Navigation -->
+  <header class="glass sticky top-0 z-50 border-b border-slate-800 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-dumbbell text-lg"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">IWFC Enterprise</h1>
+          <p class="text-xs text-slate-400 font-medium">Intelligent Wellness & Fitness Center • CMP 7001 MSc</p>
+        </div>
+      </div>
+
+      <!-- Role Switcher & Badges -->
+      <div class="flex items-center space-x-4">
+        <div class="hidden md:flex items-center space-x-2 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+          <button onclick="switchRole('admin')" id="btn-admin" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-emerald-500 text-white shadow-md">
+            <i class="fa-solid fa-crown mr-1.5 text-amber-300"></i>Administrator
+          </button>
+          <button onclick="switchRole('instructor')" id="btn-instructor" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white">
+            <i class="fa-solid fa-person-chalkboard mr-1.5 text-cyan-400"></i>Instructor
+          </button>
+          <button onclick="switchRole('member')" id="btn-member" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white">
+            <i class="fa-solid fa-user mr-1.5 text-emerald-400"></i>Member
+          </button>
+        </div>
+
+        <div class="flex items-center space-x-2 pl-3 border-l border-slate-800">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs font-mono text-emerald-400 font-semibold">Java 21 Core Online</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl mx-auto w-full p-6 space-y-6">
+
+    <!-- KPI Metric Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="glass p-5 rounded-2xl relative overflow-hidden group hover:border-emerald-500/40 transition-all">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">Active Equipment</span>
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+            <i class="fa-solid fa-gauge-high"></i>
+          </div>
+        </div>
+        <p class="text-3xl font-extrabold mt-3 text-white">12 <span class="text-xs font-medium text-emerald-400 font-mono">/ 14</span></p>
+        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>85.7% Operational</p>
+      </div>
+
+      <div class="glass p-5 rounded-2xl relative overflow-hidden group hover:border-cyan-500/40 transition-all">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">Daily Fitness Slots</span>
+          <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+        </div>
+        <p class="text-3xl font-extrabold mt-3 text-white">8 <span class="text-xs font-medium text-cyan-400 font-mono">Sessions</span></p>
+        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-shield text-cyan-400 mr-1"></i>Zero Collisions Verified</p>
+      </div>
+
+      <div class="glass p-5 rounded-2xl relative overflow-hidden group hover:border-amber-500/40 transition-all">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">Maintenance Tickets</span>
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+          </div>
+        </div>
+        <p class="text-3xl font-extrabold mt-3 text-white">2 <span class="text-xs font-medium text-amber-400 font-mono">Active</span></p>
+        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-bell text-amber-400 mr-1"></i>1 Pending, 1 In-Progress</p>
+      </div>
+
+      <div class="glass p-5 rounded-2xl relative overflow-hidden group hover:border-purple-500/40 transition-all">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">OOP Design Patterns</span>
+          <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+            <i class="fa-solid fa-cubes"></i>
+          </div>
+        </div>
+        <p class="text-3xl font-extrabold mt-3 text-white">3 <span class="text-xs font-medium text-purple-400 font-mono">GoF Patterns</span></p>
+        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-code text-purple-400 mr-1"></i>Singleton • Facade • Observer</p>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="flex items-center space-x-3 border-b border-slate-800 pb-3">
+      <button onclick="showTab('equipment')" id="tab-equipment" class="px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center space-x-2">
+        <i class="fa-solid fa-dumbbell"></i>
+        <span>Equipment Fleet</span>
+      </button>
+      <button onclick="showTab('sessions')" id="tab-sessions" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-400 hover:text-white flex items-center space-x-2">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>Session Schedule</span>
+      </button>
+      <button onclick="showTab('maintenance')" id="tab-maintenance" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-400 hover:text-white flex items-center space-x-2">
+        <i class="fa-solid fa-wrench"></i>
+        <span>Maintenance Tickets</span>
+      </button>
+      <button onclick="showTab('architecture')" id="tab-architecture" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-400 hover:text-white flex items-center space-x-2">
+        <i class="fa-solid fa-diagram-project"></i>
+        <span>Architecture & Tests</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: Equipment Management -->
+    <div id="content-equipment" class="space-y-4">
+      <div class="glass p-6 rounded-2xl">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-lg font-bold text-white">Equipment Fleet & Wear Telemetry</h2>
+            <p class="text-xs text-slate-400">Managed via <code>EquipmentService</code> & <code>Repository&lt;Equipment, String&gt;</code></p>
+          </div>
+          <button onclick="alert('Equipment registration modal simulated. Use Console CLI or backend service.')" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold shadow-lg shadow-emerald-500/20 transition-all">
+            <i class="fa-solid fa-plus mr-1.5"></i>Add Equipment
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="text-xs uppercase text-slate-400 bg-slate-900/50 border-b border-slate-800">
+              <tr>
+                <th class="p-3">ID</th>
+                <th class="p-3">Model / Name</th>
+                <th class="p-3">Facility Location</th>
+                <th class="p-3">Cumulative Usage</th>
+                <th class="p-3">Status</th>
+                <th class="p-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800 font-medium">
+              <tr class="hover:bg-slate-800/30 transition-colors">
+                <td class="p-3 font-mono text-emerald-400">EQ-001</td>
+                <td class="p-3 text-white flex items-center space-x-2">
+                  <i class="fa-solid fa-person-running text-slate-400"></i>
+                  <span>Treadmill Pro 5000</span>
+                </td>
+                <td class="p-3 text-slate-300">Cardio Zone</td>
+                <td class="p-3">
+                  <div class="w-32 bg-slate-800 rounded-full h-2">
+                    <div class="bg-emerald-500 h-2 rounded-full" style="width: 15%"></div>
+                  </div>
+                  <span class="text-xs text-slate-400 font-mono">15.0h / 100h</span>
+                </td>
+                <td class="p-3"><span class="badge-operational px-2.5 py-1 rounded-full text-xs font-bold">OPERATIONAL</span></td>
+                <td class="p-3 text-right space-x-2">
+                  <button class="text-xs text-cyan-400 hover:underline">Edit</button>
+                  <button class="text-xs text-amber-400 hover:underline">Log Hours</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition-colors">
+                <td class="p-3 font-mono text-emerald-400">EQ-002</td>
+                <td class="p-3 text-white flex items-center space-x-2">
+                  <i class="fa-solid fa-bicycle text-slate-400"></i>
+                  <span>Spin Bike Studio Racer</span>
+                </td>
+                <td class="p-3 text-slate-300">Studio A</td>
+                <td class="p-3">
+                  <div class="w-32 bg-slate-800 rounded-full h-2">
+                    <div class="bg-red-500 h-2 rounded-full" style="width: 82%"></div>
+                  </div>
+                  <span class="text-xs text-slate-400 font-mono">82.5h / 100h</span>
+                </td>
+                <td class="p-3"><span class="badge-faulty px-2.5 py-1 rounded-full text-xs font-bold">FAULTY</span></td>
+                <td class="p-3 text-right space-x-2">
+                  <button class="text-xs text-emerald-400 hover:underline">View Ticket</button>
+                  <button class="text-xs text-slate-400 hover:underline">History</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition-colors">
+                <td class="p-3 font-mono text-emerald-400">EQ-003</td>
+                <td class="p-3 text-white flex items-center space-x-2">
+                  <i class="fa-solid fa-water text-slate-400"></i>
+                  <span>Rowing Machine Ergometer</span>
+                </td>
+                <td class="p-3 text-slate-300">Cardio Zone</td>
+                <td class="p-3">
+                  <div class="w-32 bg-slate-800 rounded-full h-2">
+                    <div class="bg-emerald-500 h-2 rounded-full" style="width: 30%"></div>
+                  </div>
+                  <span class="text-xs text-slate-400 font-mono">30.0h / 100h</span>
+                </td>
+                <td class="p-3"><span class="badge-operational px-2.5 py-1 rounded-full text-xs font-bold">OPERATIONAL</span></td>
+                <td class="p-3 text-right space-x-2">
+                  <button class="text-xs text-cyan-400 hover:underline">Edit</button>
+                  <button class="text-xs text-amber-400 hover:underline">Log Hours</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Session Scheduling -->
+    <div id="content-sessions" class="hidden space-y-4">
+      <div class="glass p-6 rounded-2xl">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-lg font-bold text-white">Conflict-Free Fitness Schedule</h2>
+            <p class="text-xs text-slate-400">Enforces temporal interval validation <code>(startA &lt; endB &amp;&amp; endA &gt; startB)</code></p>
+          </div>
+          <button onclick="alert('Session scheduling simulated. Enforces InvalidBookingException validation.')" class="px-3.5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-semibold shadow-lg shadow-cyan-500/20 transition-all">
+            <i class="fa-solid fa-plus mr-1.5"></i>Create Class
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 hover:border-cyan-500/30 transition-all">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="text-xs font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">S-001</span>
+                <h3 class="font-bold text-white mt-1">Morning HIIT Power Blast</h3>
+                <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i>Studio A • Instructor: <span class="text-slate-200">inst1 (John)</span></p>
+              </div>
+              <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full">Active</span>
+            </div>
+            <div class="mt-4 flex items-center justify-between text-xs text-slate-400 border-t border-slate-800 pt-3">
+              <span><i class="fa-regular fa-clock mr-1"></i>07:00 - 08:00 AM</span>
+              <span><i class="fa-solid fa-users mr-1"></i>Capacity: <b class="text-white">1 / 10</b></span>
+              <button onclick="alert('Booked successfully for mem1!')" class="px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-semibold">Book Slot</button>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 hover:border-cyan-500/30 transition-all">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="text-xs font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">S-002</span>
+                <h3 class="font-bold text-white mt-1">Sunset Core & Pilates</h3>
+                <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i>Studio B • Instructor: <span class="text-slate-200">inst1 (John)</span></p>
+              </div>
+              <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full">Active</span>
+            </div>
+            <div class="mt-4 flex items-center justify-between text-xs text-slate-400 border-t border-slate-800 pt-3">
+              <span><i class="fa-regular fa-clock mr-1"></i>17:30 - 18:30 PM</span>
+              <span><i class="fa-solid fa-users mr-1"></i>Capacity: <b class="text-white">2 / 12</b></span>
+              <button onclick="alert('Booked successfully for mem1!')" class="px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-semibold">Book Slot</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Maintenance Workflow -->
+    <div id="content-maintenance" class="hidden space-y-4">
+      <div class="glass p-6 rounded-2xl">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-lg font-bold text-white">Maintenance Ticketing State Machine</h2>
+            <p class="text-xs text-slate-400">Lifecycle Transitions: <code>PENDING ➔ ASSIGNED ➔ COMPLETED</code></p>
+          </div>
+          <button onclick="alert('Fault report simulated. Transitions equipment to FAULTY state.')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold shadow-lg shadow-amber-500/20 transition-all">
+            <i class="fa-solid fa-triangle-exclamation mr-1.5"></i>Report Fault
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Pending Column -->
+          <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">1. Pending Review</span>
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 text-xs flex items-center justify-center font-bold">1</span>
+            </div>
+            <div class="bg-slate-800/80 p-3.5 rounded-lg border border-slate-700/60 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono text-emerald-400 font-semibold">REP-101</span>
+                <span class="badge-faulty text-[10px] px-2 py-0.5 rounded font-bold">HIGH URGENCY</span>
+              </div>
+              <p class="text-xs text-slate-200 font-semibold">Resistance motor failure on Spin Bike</p>
+              <p class="text-[11px] text-slate-400">Target: EQ-002 • Reported by inst1</p>
+              <button onclick="alert('Assigned ticket REP-101 to instructor!')" class="w-full text-center py-1 bg-cyan-500/20 hover:bg-cyan-500 text-cyan-300 hover:text-white rounded text-xs font-medium transition-all">Assign Task</button>
+            </div>
+          </div>
+
+          <!-- Assigned Column -->
+          <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider">2. In Repair (Assigned)</span>
+              <span class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-bold">1</span>
+            </div>
+            <div class="bg-slate-800/80 p-3.5 rounded-lg border border-slate-700/60 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono text-cyan-400 font-semibold">REP-100</span>
+                <span class="badge-maintenance text-[10px] px-2 py-0.5 rounded font-bold">MED URGENCY</span>
+              </div>
+              <p class="text-xs text-slate-200 font-semibold">Treadmill belt alignment calibration</p>
+              <p class="text-[11px] text-slate-400">Target: EQ-001 • Assignee: tech_lead</p>
+              <button onclick="alert('Ticket REP-100 marked COMPLETED! Equipment restored to OPERATIONAL.')" class="w-full text-center py-1 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white rounded text-xs font-medium transition-all">Mark Complete</button>
+            </div>
+          </div>
+
+          <!-- Completed Column -->
+          <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">3. Completed History</span>
+              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs flex items-center justify-center font-bold">3</span>
+            </div>
+            <div class="bg-slate-800/40 p-3.5 rounded-lg border border-slate-800 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono text-slate-400">REP-098</span>
+                <span class="text-[10px] text-emerald-400 font-bold"><i class="fa-solid fa-check mr-1"></i>RESTORED</span>
+              </div>
+              <p class="text-xs text-slate-400">Rowing machine tension cable replacement</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: Architecture & Tests -->
+    <div id="content-architecture" class="hidden space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Design Patterns -->
+        <div class="glass p-6 rounded-2xl space-y-3">
+          <h3 class="text-base font-bold text-white flex items-center space-x-2">
+            <i class="fa-solid fa-cubes text-purple-400"></i>
+            <span>Gang of Four (GoF) Patterns</span>
+          </h3>
+          <ul class="space-y-2.5 text-xs text-slate-300">
+            <li class="p-3 bg-slate-900/60 rounded-xl border border-slate-800">
+              <b class="text-purple-400">1. Creational: Singleton (SystemManager)</b>
+              <p class="text-slate-400 mt-1">Double-checked locking with volatile instance variable. Guarantees atomic global state.</p>
+            </li>
+            <li class="p-3 bg-slate-900/60 rounded-xl border border-slate-800">
+              <b class="text-cyan-400">2. Structural: Facade (IWFCFacade)</b>
+              <p class="text-slate-400 mt-1">Aggregates Equipment, Session, Maintenance, and User services behind a unified API.</p>
+            </li>
+            <li class="p-3 bg-slate-900/60 rounded-xl border border-slate-800">
+              <b class="text-emerald-400">3. Behavioural: Observer (NotificationCenter)</b>
+              <p class="text-slate-400 mt-1">Dispatches maintenance state mutations to all registered users asynchronously.</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- JUnit Verification & Intentional Fail -->
+        <div class="glass p-6 rounded-2xl space-y-3">
+          <h3 class="text-base font-bold text-white flex items-center space-x-2">
+            <i class="fa-solid fa-vial-circle-check text-emerald-400"></i>
+            <span>JUnit 5 Test Verification</span>
+          </h3>
+          <div class="p-4 bg-slate-950 rounded-xl font-mono text-xs text-slate-300 border border-slate-800 space-y-1">
+            <p class="text-emerald-400">[INFO] Tests run: 19, Failures: 1, Errors: 0</p>
+            <p class="text-slate-400">✓ NotificationCenterTest (2 passed)</p>
+            <p class="text-slate-400">✓ InMemoryRepositoryTest (3 passed)</p>
+            <p class="text-slate-400">✓ AccessControlTest (2 passed)</p>
+            <p class="text-slate-400">✓ EquipmentServiceTest (3 passed)</p>
+            <p class="text-slate-400">✓ MaintenanceServiceTest (3 passed)</p>
+            <p class="text-slate-400">✓ SessionServiceTest (5 passed)</p>
+            <p class="text-amber-400">✖ Intentional Boundary Fail: bookingExactlyAtClosingTime</p>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            <b>Intentional Failing Test Analysis:</b> Operating curfew closes at 22:00. The unit test asserts a strict curfew invariant <code>(&lt; 22:00)</code> against service boundary <code>(&lt;= 22:00)</code>, proving robust boundary validation for the report & presentation.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Script for Interactive Dashboard Simulation -->
+  <script>
+    function showTab(tab) {
+      ['equipment', 'sessions', 'maintenance', 'architecture'].forEach(t => {
+        document.getElementById('content-' + t).classList.add('hidden');
+        document.getElementById('tab-' + t).classList.remove('bg-emerald-500/10', 'text-emerald-400', 'border', 'border-emerald-500/30');
+        document.getElementById('tab-' + t).classList.add('text-slate-400');
+      });
+      document.getElementById('content-' + tab).classList.remove('hidden');
+      document.getElementById('tab-' + tab).classList.add('bg-emerald-500/10', 'text-emerald-400', 'border', 'border-emerald-500/30');
+      document.getElementById('tab-' + tab).classList.remove('text-slate-400');
+    }
+
+    function switchRole(role) {
+      ['admin', 'instructor', 'member'].forEach(r => {
+        const b = document.getElementById('btn-' + r);
+        b.classList.remove('bg-emerald-500', 'text-white', 'shadow-md');
+        b.classList.add('text-slate-400');
+      });
+      const activeBtn = document.getElementById('btn-' + role);
+      activeBtn.classList.add('bg-emerald-500', 'text-white', 'shadow-md');
+      activeBtn.classList.remove('text-slate-400');
+    }
+  </script>
+
+</body>
+</html>
