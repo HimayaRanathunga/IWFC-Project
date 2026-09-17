@@ -263,20 +263,6 @@ IWFC-Project/
 └── README.md                 # Project documentation
 ```
 
----
-
-## 🎓 Academic Integrity & References
-
-Developed for **Cardiff Metropolitan University / ICBT Campus**:
-* **Module**: CMP 7001 – Advanced Programming
-* **Assessment**: PRAC 1 (75%) & PRES 1 (25%)
-* **Literature Foundations**:
-  * Bloch, J. (2018) *Effective Java*. 3rd edn. Addison-Wesley.
-  * Gamma, E. et al. (1994) *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley.
-  * Martin, R.C. (2018) *Clean Architecture: A Craftsman's Guide to Software Structure and Design*. Prentice Hall.
-
----
-
 <div align="center">
   <sub>Engineered with precision for <b>MSc in Information Technology</b> • 2026</sub>
 </div>
