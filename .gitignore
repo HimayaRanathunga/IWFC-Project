@@ -1,5 +1,7 @@
 target/
+bin/
 *.iml
 .idea/
 .vscode/
 *.class
+sources.txt
