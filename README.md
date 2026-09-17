@@ -1,12 +1,3 @@
-<div align="center">
-
-```
-  ___  _    _  ____  ____ 
- |_ _|| |  | || ___|/ ___|
-  | | | |/\| || |_ | |    
-  | | \  /\  /|  _|| |___ 
- |___| \/  \/ |_|   \____|
-```
 
 # 🏋️ Intelligent Wellness and Fitness Center (IWFC)
 ### *Next-Generation Object-Oriented Enterprise Management System*
