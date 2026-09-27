@@ -263,6 +263,3 @@ IWFC-Project/
 └── README.md                 # Project documentation
 ```
 
-<div align="center">
-  <sub>Engineered with precision for <b>MSc in Information Technology</b> • 2026</sub>
-</div>
