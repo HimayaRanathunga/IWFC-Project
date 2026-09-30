@@ -11,15 +11,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * [Unit Testing] Tests for the generic Repository (Generics/Collections requirement).
+ */
 class InMemoryRepositoryTest {
 
+    // Generic repository reused for Equipment, with the ID type String.
     private InMemoryRepository<Equipment, String> repository;
 
+    // JUnit 5 lifecycle: @BeforeEach runs before every test, so each test starts with a fresh empty repository.
     @BeforeEach
     void setUp() {
+        // Method reference Equipment::getId tells the repository how to read the ID of an item.
         repository = new InMemoryRepository<>(Equipment::getId);
     }
 
+    // Verifies: add stores an item and findById returns it inside an Optional.
     @Test
     void add_and_findById() {
         Equipment equipment = new Equipment("EQ-1", "Treadmill", "Cardio Zone");
@@ -31,6 +38,7 @@ class InMemoryRepositoryTest {
         assertEquals("Treadmill", found.get().getName());
     }
 
+    // Verifies: findAll returns every stored item.
     @Test
     void findAll_returnsAllItems() {
         repository.add(new Equipment("EQ-1", "Treadmill", "Cardio Zone"));
@@ -41,6 +49,7 @@ class InMemoryRepositoryTest {
         assertEquals(2, all.size());
     }
 
+    // Verifies: remove deletes the item so existsById becomes false.
     @Test
     void remove_deletesItem() {
         repository.add(new Equipment("EQ-1", "Treadmill", "Cardio Zone"));

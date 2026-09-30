@@ -2,13 +2,21 @@ package com.iwfc.model;
 
 import java.util.Objects;
 
+/**
+ * [Task 3 - Maintenance Reporting] A fault report for a piece of equipment.
+ *
+ * Encapsulation: the facts of the report (id, equipment, description, urgency, reporter)
+ * are final. Only the workflow fields (status and assignee) can change later.
+ */
 public class MaintenanceReport {
 
+    // Immutable identity: set once in the constructor.
     private final String id;
     private final String equipmentId;
     private final String description;
     private final Urgency urgency;
     private final String reportedByUsername;
+    // Mutable workflow state: enum-based status (PENDING, ASSIGNED, COMPLETED) and the assignee.
     private ReportStatus status;
     private String assignedToUsername;
 
@@ -19,6 +27,7 @@ public class MaintenanceReport {
         this.description = description;
         this.urgency = urgency;
         this.reportedByUsername = reportedByUsername;
+        // Every new report starts as PENDING.
         this.status = ReportStatus.PENDING;
     }
 
@@ -58,6 +67,7 @@ public class MaintenanceReport {
         this.assignedToUsername = assignedToUsername;
     }
 
+    // equals/hashCode contract: identity is the id only, and hashCode uses the same field.
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -21,18 +21,23 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * [Structural Pattern - Facade]
  * Facade pattern: the console UI talks to this single class instead of
  * coordinating four separate services plus the SystemManager singleton
  * directly. Also the single place admin-only checks are enforced, so they
  * hold regardless of how menus are wired.
+ * Uses composition (owns the four services) and constructor injection of SystemManager.
  */
 public class IWFCFacade {
 
+    // Composition: the facade owns one service per area (single responsibility each).
     private final EquipmentService equipmentService;
     private final SessionService sessionService;
     private final MaintenanceService maintenanceService;
     private final UserService userService;
 
+    // Dependency injection: the SystemManager is passed in, and its repositories and
+    // NotificationCenter are handed to each service through their constructors.
     public IWFCFacade(SystemManager systemManager) {
         this.equipmentService = new EquipmentService(systemManager.getEquipmentRepository());
         this.sessionService = new SessionService(systemManager.getSessionRepository());
@@ -41,7 +46,8 @@ public class IWFCFacade {
         this.userService = new UserService(systemManager.getUserRepository(), systemManager.getNotificationCenter());
     }
 
-    // --- Equipment ---
+    // --- Equipment --- [Task 1 - Equipment Tracking]
+    // Facade: each method simply delegates to the right service.
 
     public Equipment registerEquipment(String id, String name, String location) {
         return equipmentService.addEquipment(id, name, location);
@@ -81,12 +87,12 @@ public class IWFCFacade {
         return userService.findByRole(role);
     }
 
-    // --- Sessions ---
+    // --- Sessions --- [Task 2 - Session Scheduling]
 
     public List<Session> bookSession(String idPrefix, String title, String resourceName,
                                       String instructorUsername, LocalDateTime startTime,
                                       int durationMinutes, boolean recurring, int capacity)
-            throws InvalidBookingException {
+            throws InvalidBookingException { // checked exception is passed up to the UI
         return sessionService.bookSession(idPrefix, title, resourceName, instructorUsername,
                 startTime, durationMinutes, recurring, capacity);
     }
@@ -107,13 +113,14 @@ public class IWFCFacade {
         return sessionService.listByInstructor(instructorUsername);
     }
 
-    // --- Maintenance ---
+    // --- Maintenance --- [Task 3 - Maintenance Reporting]
 
     public MaintenanceReport reportFault(String id, String equipmentId, String description,
                                           Urgency urgency, String reportedByUsername) {
         return maintenanceService.reportFault(id, equipmentId, description, urgency, reportedByUsername);
     }
 
+    // RBAC: only administrators may assign, complete or view the global log.
     public void assignTask(User caller, String reportId, String assignedToUsername) {
         requireAdministrator(caller);
         maintenanceService.assignTask(reportId, assignedToUsername);
@@ -134,6 +141,7 @@ public class IWFCFacade {
         return maintenanceService.groupByUrgency();
     }
 
+    /** RBAC: central admin-only check; throws the unchecked UnauthorizedAccessException. */
     private void requireAdministrator(User caller) {
         if (caller.getRole() != Role.ADMINISTRATOR) {
             throw new UnauthorizedAccessException(

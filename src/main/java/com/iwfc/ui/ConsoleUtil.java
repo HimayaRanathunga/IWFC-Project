@@ -8,11 +8,16 @@ import java.util.Scanner;
 /**
  * Modern console utility providing ANSI color accents, box-drawing styling,
  * status badge rendering, and robust input validation.
+ *
+ * [Console Interface] Utility class: static ANSI constants and print helpers, plus instance methods that read
+ * and validate user input. Every input method loops until the value is valid, so bad input never crashes the app.
  */
 public class ConsoleUtil {
 
+    // Constant formatter for date input; must match the prompt text in readDateTime.
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    // Static final constants: ANSI escape codes shared by the whole UI (imported statically in ConsoleApp).
     // --- ANSI Escape Codes for Modern CLI Aesthetics ---
     public static final String RESET   = "\u001B[0m";
     public static final String BOLD    = "\u001B[1m";
@@ -29,12 +34,14 @@ public class ConsoleUtil {
     public static final String BG_BLUE = "\u001B[44m";
     public static final String BG_DARK = "\u001B[100m";
 
+    // Encapsulation: the Scanner is private and injected through the constructor (easy to replace in tests).
     private final Scanner scanner;
 
     public ConsoleUtil(Scanner scanner) {
         this.scanner = scanner;
     }
 
+    // Static helpers: print methods need no object state, so they can be called as ConsoleUtil.printX(...).
     public static void printSuccess(String message) {
         System.out.println(GREEN + " ✔  " + message + RESET);
     }
@@ -51,6 +58,7 @@ public class ConsoleUtil {
         System.out.println(CYAN + " ℹ  " + message + RESET);
     }
 
+    // Switch expression on String: returns a coloured status badge, default handles unknown values.
     public static String statusBadge(String status) {
         return switch (status.toUpperCase()) {
             case "OPERATIONAL" -> GREEN + BOLD + "[ OPERATIONAL ]" + RESET;
@@ -66,6 +74,7 @@ public class ConsoleUtil {
         };
     }
 
+    // Input validation loop: repeats until the text is a whole number; NumberFormatException is caught and reported.
     public int readInt(String prompt) {
         while (true) {
             System.out.print(CYAN + prompt + RESET);
@@ -78,6 +87,7 @@ public class ConsoleUtil {
         }
     }
 
+    // Same validation pattern for decimal numbers (used for equipment usage hours).
     public double readDouble(String prompt) {
         while (true) {
             System.out.print(CYAN + prompt + RESET);
@@ -90,6 +100,7 @@ public class ConsoleUtil {
         }
     }
 
+    // Input validation loop: rejects empty or blank input.
     public String readNonEmptyString(String prompt) {
         while (true) {
             System.out.print(CYAN + prompt + RESET);
@@ -101,6 +112,7 @@ public class ConsoleUtil {
         }
     }
 
+    // Input validation loop: DateTimeParseException means wrong format, so the user is asked again.
     public LocalDateTime readDateTime(String prompt) {
         while (true) {
             System.out.print(CYAN + prompt + " (yyyy-MM-dd HH:mm): " + RESET);
@@ -113,6 +125,7 @@ public class ConsoleUtil {
         }
     }
 
+    // Input validation loop: accepts only y/yes/n/no.
     public boolean readYesNo(String prompt) {
         while (true) {
             System.out.print(CYAN + prompt + " (y/n): " + RESET);

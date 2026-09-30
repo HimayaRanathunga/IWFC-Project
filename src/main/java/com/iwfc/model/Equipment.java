@@ -3,14 +3,18 @@ package com.iwfc.model;
 import java.util.Objects;
 
 /**
+ * [Task 1 - Equipment Tracking] A piece of gym equipment with status, location and usage hours.
+ *
  * Encapsulation: usageHours has no public setter. The only way to change it
  * is addUsageHours(), which enforces the maintenance-alert invariant itself
  * rather than trusting callers to remember to check it.
  */
 public class Equipment {
 
+    // Static constant: one shared value for all Equipment objects (maintenance alert limit).
     public static final double MAINTENANCE_THRESHOLD_HOURS = 100.0;
 
+    // Encapsulation: all fields are private. The id is final, so it never changes.
     private final String id;
     private String name;
     private EquipmentStatus status;
@@ -62,6 +66,7 @@ public class Equipment {
         return active;
     }
 
+    // Soft delete: the record is kept but marked inactive instead of being removed.
     public void deactivate() {
         this.active = false;
     }
@@ -71,6 +76,7 @@ public class Equipment {
      * threshold and its status was automatically flipped to UNDER_MAINTENANCE.
      */
     public boolean addUsageHours(double hours) {
+        // Unchecked exception: negative hours is a programming/input error, not a recoverable case.
         if (hours < 0) {
             throw new IllegalArgumentException("Usage hours cannot be negative");
         }
@@ -84,6 +90,7 @@ public class Equipment {
         return false;
     }
 
+    // equals/hashCode contract: identity is the id only, and hashCode uses the same field.
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

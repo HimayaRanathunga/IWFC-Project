@@ -11,8 +11,10 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 /**
+ * [Task 2 - Session Scheduling]
  * Core scheduling logic: creating (booking) a session slot for a resource,
  * and members reserving/cancelling a spot within an existing session.
+ * Single responsibility: scheduling rules only; storage is left to the repository.
  */
 public class SessionService {
 
@@ -20,8 +22,10 @@ public class SessionService {
     public static final LocalTime CLOSING_TIME = LocalTime.of(22, 0);
     private static final int RECURRING_WEEKLY_OCCURRENCES = 4;
 
+    // Dependency inversion: Repository interface.
     private final Repository<Session, String> sessionRepository;
 
+    // Constructor injection: the repository is supplied from outside.
     public SessionService(Repository<Session, String> sessionRepository) {
         this.sessionRepository = sessionRepository;
     }
@@ -37,9 +41,10 @@ public class SessionService {
     public List<Session> bookSession(String idPrefix, String title, String resourceName,
                                       String instructorUsername, LocalDateTime startTime,
                                       int durationMinutes, boolean recurring, int capacity)
-            throws InvalidBookingException {
+            throws InvalidBookingException { // checked exception: callers must handle or declare it
 
         int occurrences = recurring ? RECURRING_WEEKLY_OCCURRENCES : 1;
+        // Generics: a typed list of Session.
         List<Session> created = new java.util.ArrayList<>();
 
         for (int week = 0; week < occurrences; week++) {
@@ -48,6 +53,7 @@ public class SessionService {
             Session candidate = new Session(sessionId, title, resourceName, instructorUsername,
                     occurrenceStart, durationMinutes, recurring, capacity);
 
+            // Checked exceptions from these validations propagate up to the caller.
             validateOperatingHours(candidate);
             validateNoConflict(candidate);
 
@@ -69,6 +75,7 @@ public class SessionService {
     }
 
     private void validateNoConflict(Session candidate) throws InvalidBookingException {
+        // Streams + lambda: anyMatch checks whether any other session overlaps the candidate.
         boolean conflict = sessionRepository.findAll().stream()
                 .anyMatch(existing -> !existing.getId().equals(candidate.getId()) && existing.overlaps(candidate));
         if (conflict) {
@@ -78,6 +85,7 @@ public class SessionService {
         }
     }
 
+    /** Reserves a spot: rejects a duplicate booking or a full session (checked exception). */
     public void reserveSpot(String sessionId, String memberUsername) throws InvalidBookingException {
         Session session = getSessionOrThrow(sessionId);
         if (session.isMemberBooked(memberUsername)) {
@@ -104,12 +112,14 @@ public class SessionService {
     }
 
     public List<Session> listByInstructor(String instructorUsername) {
+        // Streams: filter with a lambda, then collect to a list.
         return sessionRepository.findAll().stream()
                 .filter(s -> s.getInstructorUsername().equals(instructorUsername))
                 .collect(Collectors.toList());
     }
 
     public Session getSessionOrThrow(String sessionId) {
+        // Optional.orElseThrow with a lambda supplier.
         return sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new NoSuchElementException("No session found with ID " + sessionId));
     }

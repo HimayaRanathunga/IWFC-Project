@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * [Generics and Collections] Interface with type parameters: T is the entity type
+ * and ID is the key type. findById returns Optional so "not found" is explicit
+ * and callers avoid null checks.
+ *
  * Generic repository abstraction reused for every entity type in the system,
  * so storage/query logic is written once instead of per-entity.
  */

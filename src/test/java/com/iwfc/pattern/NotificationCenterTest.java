@@ -11,12 +11,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * [Unit Testing] Tests for the Observer pattern (Behavioural pattern requirement).
+ */
 class NotificationCenterTest {
 
+    // Verifies: an observer registered with the subject receives the published message.
     @Test
     void registerObserver_receivesNotification() {
         NotificationCenter center = new NotificationCenter();
         List<String> received = new ArrayList<>();
+        // Method reference (received::add) used as the NotificationObserver, possible because the interface has one method.
         NotificationObserver observer = received::add;
 
         center.registerObserver(observer);
@@ -26,6 +31,7 @@ class NotificationCenterTest {
         assertEquals("Test message", received.get(0));
     }
 
+    // Verifies: Polymorphic dispatch - the center only knows the NotificationObserver type.
     @Test
     void notifyAll_invokesOverriddenOnNotifyPerRole() {
         // Member overrides onNotify() to record the message in its own state -

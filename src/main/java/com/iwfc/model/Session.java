@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * [Task 2 - Session Scheduling] A scheduled session on a resource with an instructor,
+ * a time range, a capacity and a list of booked members.
+ *
+ * Immutability: the session details are final and fixed at construction.
+ * Only the booking list can change, and only through addBooking/removeBooking.
+ */
 public class Session {
 
     private final String id;
@@ -49,6 +56,7 @@ public class Session {
         return startTime;
     }
 
+    // Derived getter: the end time is calculated, not stored, so it can never be out of sync.
     public LocalDateTime getEndTime() {
         return startTime.plusMinutes(durationMinutes);
     }
@@ -65,6 +73,7 @@ public class Session {
         return capacity;
     }
 
+    // Defensive copy: callers get an unmodifiable snapshot, not our internal list.
     public List<String> getBookedMemberUsernames() {
         return List.copyOf(bookedMemberUsernames);
     }
@@ -85,7 +94,11 @@ public class Session {
         return bookedMemberUsernames.remove(memberUsername);
     }
 
-    /** True if this session shares the same resource and its time range overlaps the other's. */
+    /**
+     * True if this session shares the same resource and its time range overlaps the other's.
+     * Used for the double-booking check. The ranges are half-open, so a session that ends
+     * exactly when another starts does not count as an overlap.
+     */
     public boolean overlaps(Session other) {
         if (!resourceName.equalsIgnoreCase(other.resourceName)) {
             return false;
@@ -93,6 +106,7 @@ public class Session {
         return startTime.isBefore(other.getEndTime()) && other.getStartTime().isBefore(getEndTime());
     }
 
+    // equals/hashCode contract: identity is the id only, and hashCode uses the same field.
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

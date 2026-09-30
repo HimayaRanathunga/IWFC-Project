@@ -15,16 +15,22 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * [Unit Testing] Task 2 - Session Scheduling: booking, validation rules, recurrence and reserve/cancel.
+ * InvalidBookingException is checked, so tests either declare "throws" or use assertThrows with a lambda.
+ */
 class SessionServiceTest {
 
     private SessionService sessionService;
 
+    // JUnit 5 lifecycle: @BeforeEach gives every test a new SessionService with an empty repository.
     @BeforeEach
     void setUp() {
         Repository<Session, String> repository = new InMemoryRepository<>(Session::getId);
         sessionService = new SessionService(repository);
     }
 
+    // Verifies: a valid single session is created and stored.
     @Test
     void bookSession_success() throws InvalidBookingException {
         List<Session> created = sessionService.bookSession("S1", "Morning Yoga", "Studio A", "inst1",
@@ -34,16 +40,19 @@ class SessionServiceTest {
         assertEquals("S1", created.get(0).getId());
     }
 
+    // Verifies: core scheduling validation - overlapping time on the same resource is rejected (double booking).
     @Test
     void bookSession_doubleBookingThrowsInvalidBookingException() throws InvalidBookingException {
         sessionService.bookSession("S1", "Morning Yoga", "Studio A", "inst1",
                 LocalDateTime.of(2026, 3, 5, 9, 0), 60, false, 10);
 
+        // assertThrows with a lambda: the second, overlapping booking must throw InvalidBookingException.
         assertThrows(InvalidBookingException.class, () ->
                 sessionService.bookSession("S2", "HIIT", "Studio A", "inst1",
                         LocalDateTime.of(2026, 3, 5, 9, 30), 60, false, 10));
     }
 
+    // Verifies: core scheduling validation - a session before opening time is rejected (operating hours rule).
     @Test
     void bookSession_outsideOperatingHoursThrowsInvalidBookingException() {
         assertThrows(InvalidBookingException.class, () ->
@@ -51,6 +60,7 @@ class SessionServiceTest {
                         LocalDateTime.of(2026, 3, 5, 5, 0), 60, false, 10));
     }
 
+    // Verifies: a weekly recurring session creates 4 occurrences.
     @Test
     void recurringWeeklySession_createsExpectedOccurrenceCount() throws InvalidBookingException {
         List<Session> created = sessionService.bookSession("S1", "Monday Pilates", "Studio A", "inst1",
@@ -59,6 +69,7 @@ class SessionServiceTest {
         assertEquals(4, created.size());
     }
 
+    // Verifies: cancelling a reservation frees the slot (capacity 1), so another member can book it.
     @Test
     void cancelBooking_freesSlotForRebooking() throws InvalidBookingException {
         sessionService.bookSession("S1", "Spin Class", "EQ-002", "inst1",
